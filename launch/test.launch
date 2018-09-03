@@ -1,13 +1,13 @@
 <launch>
 
     <!-- main launch node -->
-    <node pkg="pointgrey_ladybug_5p" type="ladybug_camera" name="lady_bug" output="screen">
-    <!--<node pkg="pointgrey_ladybug_5p" type="ladybug_camera" name="lady_bug" output="screen" launch-prefix="gdb -ex run &#45;&#45;args">-->
+    <node pkg="pointgrey_ladybug" type="ladybug_camera" name="ladybug_camera" output="screen">
+    <!--<node pkg="pointgrey_ladybug" type="ladybug_camera" name="ladybug_camera" output="screen" launch-prefix="gdb -ex run &#45;&#45;args">-->
 
 
         <!-- camera properties -->
-        <param name="framerate"               type="double" value="30"/>
-        <param name="use_auto_framerate"      type="bool"   value="true"/>
+        <param name="framerate"               type="double" value="12"/>
+        <param name="use_auto_framerate"      type="bool"   value="false"/>
         <param name="shutter_time"            type="double" value="0.8"/>
         <param name="use_auto_shutter_time"   type="bool"   value="false"/>
         <param name="gain_amount"             type="double" value="20"/>
