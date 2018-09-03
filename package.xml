@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+  <name>pointgrey_ladybug</name>
+  <version>1.0.0</version>
+  <description>Drive for use with the Pointgrey Ladybug camera</description>
+  <maintainer email="pgeneva@udel.edu">Patrick Geneva</maintainer>
+  <license>BSD</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <export>
+  </export>
+</package>
