@@ -1,6 +1,8 @@
 # Pointgrey Ladybug ROS Driver
 
-
+This driver is an expansion of the Ladybug driver in [Autoware](https://github.com/CPFL/Autoware/tree/master/ros/src/sensing/drivers/camera/packages/pointgrey) driver.
+The key changes are more config options and added support for the Ladybug 5+ camera.
+See below for the install instructions, and the parameters that can be set in the launch file.
 
 
 ## Installation
