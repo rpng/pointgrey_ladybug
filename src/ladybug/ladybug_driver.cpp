@@ -126,12 +126,12 @@ void GetMatricesFromFile(ros::NodeHandle nh, sensor_msgs::CameraInfo &camerainfo
 /**
  * This function will publish a given image to the ROS communication framework
  */
-void publishImage(ros::Time& timestamp, cv::Mat& image, ros::Publisher& image_pub, long int& count) {
+void publishImage(ros::Time& timestamp, cv::Mat& image, ros::Publisher& image_pub, long int& count, size_t camid) {
 
     // Create the message
     sensor_msgs::Image msg;
     msg.header.seq = (uint)count;
-    msg.header.frame_id = "camera";
+    msg.header.frame_id = "camera" + std::to_string(camid);
     msg.header.stamp = timestamp;
     msg.height = (uint)image.size().height;
     msg.width  = (uint)image.size().width;
@@ -489,7 +489,7 @@ int main (int argc, char **argv)
 
             // Publish the current image!
             // TODO: also publish the camera info here too!
-            publishImage(timestamp, image, pub[i], count);
+            publishImage(timestamp, image, pub[i], count, i);
 
         }
 

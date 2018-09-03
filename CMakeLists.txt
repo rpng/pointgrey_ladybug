@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.12)
 
-project(pointgrey_ladybug_5p)
+project(pointgrey_ladybug)
 
 find_package(catkin REQUIRED COMPONENTS
 	roscpp

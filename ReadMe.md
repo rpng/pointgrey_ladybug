@@ -3,6 +3,7 @@
 This driver is an expansion of the Ladybug driver in [Autoware](https://github.com/CPFL/Autoware/tree/master/ros/src/sensing/drivers/camera/packages/pointgrey) driver.
 The key changes are more config options and added support for the Ladybug 5+ camera.
 See below for the install instructions, and the parameters that can be set in the launch file.
+Also this prints out more information about the configuration, so you should check if your camera is running on USB2 or USB3 according to the SDK library.
 
 
 ## Installation
