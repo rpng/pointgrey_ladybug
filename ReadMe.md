@@ -6,6 +6,19 @@ See below for the install instructions, and the parameters that can be set in th
 Also this prints out more information about the configuration, so you should check if your camera is running on USB2 or USB3 according to the SDK library.
 
 
+
+
+## Launch Parameters
+
+
+* `framerate` - framerate of the camera (example 10-20 fps)
+* `shutter_time` - time in second the shutter should be open (example 0.02-2 seconds)
+* `gain` - amount of gain the image should have applied (example 0-18 db)
+
+
+
+
+
 ## Installation
 * Download SDK - https://www.ptgrey.com/Downloads/GetSecureDownloadItem/10997
 * `sudo apt-get install xsdcxx`
@@ -21,11 +34,12 @@ Also this prints out more information about the configuration, so you should che
 
 
 
-## Parameters
 
+## Uninstalling
 
-* `framerate` - framrate of the camera (example 10-20 fps)
-* `shutter_time` - time in second the shutter should be open (example 0.02-2 seconds)
-* `gain` - amount of gain the image should have applied (example 0-18 db)
+* The package should be installed as a system package
+* If you need to use other pointgrey drivers (that also use the libflycapture.so file)
+* `sudo apt-get remove ladybug`
+
 
 
