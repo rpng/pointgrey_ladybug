@@ -20,6 +20,14 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 
+#define _HANDLE_ERROR \
+    if( error != LADYBUG_OK ) \
+   { \
+   return error; \
+   } \
+   \
+
+
 using namespace std;
 
 static volatile int running_ = 1;
@@ -159,17 +167,13 @@ LadybugError init_camera() {
     // Create the SDK context
     LadybugError error;
     error = ladybugCreateContext(&m_context);
-    if (error != LADYBUG_OK) {
-        throw std::runtime_error("Unable to create Ladybug context.");
-    }
+    _HANDLE_ERROR;
 
     // Here we want to get the number of cameras this sensor has
     LadybugCameraInfo enumeratedCameras[16];
     unsigned int numCameras = 16;
     error = ladybugBusEnumerateCameras(m_context, enumeratedCameras, &numCameras);
-    if (error != LADYBUG_OK) {
-        return error;
-    }
+    _HANDLE_ERROR;
     ROS_INFO("%d cameras detected",numCameras);
 
     // If we where not able to load any cameras, then error
@@ -181,16 +185,12 @@ LadybugError init_camera() {
 
     // Finally, lets initalize!
     error = ladybugInitializeFromIndex(m_context, 0);
-    if (error != LADYBUG_OK) {
-        return error;
-    }
+    _HANDLE_ERROR;
 
     // Get the camera information about the connected device
     LadybugCameraInfo camInfo;
     error = ladybugGetCameraInfo(m_context, &camInfo);
-    if (error != LADYBUG_OK) {
-        return error;
-    }
+    _HANDLE_ERROR;
 
 
     // Bunch of maps between the enums of the SDK and strings
@@ -263,7 +263,7 @@ LadybugError init_camera() {
         case LADYBUG_DEVICE_LADYBUG5P:
         {
             m_dataFormat = LADYBUG_DATAFORMAT_RAW8;
-            m_frameRate = 30.0f;
+            m_frameRate = 20.0f;
             m_isFrameRateAuto = false;
             m_jpegQualityPercentage = 80;
             m_isShutterAuto = false;
@@ -293,37 +293,27 @@ LadybugError start_camera() {
     // Start the camera in the "lock" mode where we can unlock and lock to get the image
     LadybugError error;
     error = ladybugStartLockNext(m_context, m_dataFormat);
-    if (error != LADYBUG_OK) {
-        return error;
-    }
+    _HANDLE_ERROR;
 
     // Set the framerate of the camera
     ROS_INFO("CONFIG: setting framerate of %d (auto = %d)",(int)m_frameRate,(int)m_isFrameRateAuto);
     error = ladybugSetAbsPropertyEx(m_context, LADYBUG_FRAME_RATE, false, true, m_isFrameRateAuto, m_frameRate);
-    if (error != LADYBUG_OK) {
-        return error;
-    }
+    _HANDLE_ERROR;
 
     // Set the shutter/exposure of the camera
     ROS_INFO("CONFIG: setting shutter time of %.3f (auto = %d)",m_shutterTime,(int)m_isShutterAuto);
     error = ladybugSetAbsPropertyEx(m_context, LADYBUG_SHUTTER, false, true, m_isShutterAuto, m_shutterTime);
-    if (error != LADYBUG_OK) {
-        return error;
-    }
+    _HANDLE_ERROR;
 
     // Set the gain of the camera
     ROS_INFO("CONFIG: setting gain db of %d (auto = %d)",(int)m_gainAmount,(int)m_isGainAuto);
     error = ladybugSetAbsPropertyEx(m_context, LADYBUG_GAIN, false, true, m_isGainAuto, m_gainAmount);
-    if (error != LADYBUG_OK) {
-        return error;
-    }
+    _HANDLE_ERROR;
 
     // Set the JPEG quality of the image
     ROS_INFO("CONFIG: setting jpeg quality of %d",(int)m_jpegQualityPercentage);
     error = ladybugSetJPEGQuality(m_context, m_jpegQualityPercentage);
-    if (error != LADYBUG_OK) {
-        return error;
-    }
+    _HANDLE_ERROR;
 
     // Perform a quick test to make sure images can be successfully acquired
     ROS_INFO("Testing that images can be acquired..");
@@ -336,9 +326,7 @@ LadybugError start_camera() {
 
     // Unlock all the images we have
     error = ladybugUnlockAll(m_context);
-    if (error != LADYBUG_OK) {
-        return error;
-    }
+    _HANDLE_ERROR;
 
     // Done, return the erro if wehad one
     return error;
@@ -392,7 +380,8 @@ int main (int argc, char **argv)
     // Initialize ladybug camera
     const LadybugError grabberInitError = init_camera();
     if (grabberInitError != LADYBUG_OK) {
-        ROS_ERROR("Error: Failed to initialize camera (%s). Terminating...", ladybugErrorToString(grabberInitError));
+        ROS_ERROR("Failed to initialize camera (%s).", ladybugErrorToString(grabberInitError));
+        ROS_ERROR("Terminating...");
         return EXIT_FAILURE;
     }
 
@@ -401,7 +390,7 @@ int main (int argc, char **argv)
     if (private_nh.getParam("scale", image_scale) && image_scale>0 && image_scale<=100) {
         ROS_INFO("Ladybug ImageScale > %i%%", image_scale);
     } else {
-        ROS_WARN("Ladybug ImageScale scale must be (0,100]. Defaulting to 20 ");
+        ROS_WARN("Ladybug ImageScale scale must be (0,100]. Defaulting to 20");
         image_scale = 20;
     }
 
@@ -419,14 +408,15 @@ int main (int argc, char **argv)
     // Get the ladybug camera information, also show the debug
     LadybugCameraInfo camInfo;
     if (LADYBUG_OK != ladybugGetCameraInfo(m_context, &camInfo)) {
-        ROS_ERROR("Error: Failed to get camera information. Terminating...");
+        ROS_ERROR("Failed to get camera information. Terminating...");
         return EXIT_FAILURE;
     }
 
     // Start the camera!
     const LadybugError startError = start_camera();
     if (startError != LADYBUG_OK) {
-        ROS_ERROR("Error: Failed to start camera (%s). Terminating...", ladybugErrorToString(startError) );
+        ROS_ERROR("Failed to start camera (%s).", ladybugErrorToString(startError));
+        ROS_ERROR("Terminating...");
         return EXIT_FAILURE;
     }
 
@@ -436,8 +426,6 @@ int main (int argc, char **argv)
     //sensor_msgs::CameraInfo camerainfo_msg;
     //GetMatricesFromFile(private_nh, camerainfo_msg);
     //ros::Publisher camera_info_pub = n.advertise<sensor_msgs::CameraInfo>("/camera/camera_info", 1, true);
-
-
 
 
     // Create the publishers

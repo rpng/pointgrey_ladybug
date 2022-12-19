@@ -34,9 +34,12 @@ if(EXISTS "/usr/include/ladybug")
 	target_link_libraries(ladybug_camera
 		${catkin_LIBRARIES}
 		${OpenCV_LIBS}
-		flycapture
-		ladybug
+		/usr/lib/ladybug/libflycapture.so
+		/usr/lib/ladybug/libladybug.so
+		# /usr/lib/x86_64-linux-gnu/libavcodec.so
+		# /usr/lib/x86_64-linux-gnu/libavformat.so
+		# /usr/lib/x86_64-linux-gnu/libavutil.so
 	)
 else()
-	message("'SDK for Ladybug' is not installed. 'ladybug_camera' will not be built.")
+	message(ERROR "'SDK for Ladybug' is not installed. 'ladybug_camera' will not be built.")
 endif()
