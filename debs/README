@@ -1,0 +1,78 @@
+﻿//=============================================================================
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
+//
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
+// accordance with the terms of the license agreement you entered into
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
+//
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
+// THIS SOFTWARE OR ITS DERIVATIVES.
+//=============================================================================
+
+===============================================================================
+==
+== README
+==
+===============================================================================
+
+===============================================================================
+1. LADYBUG INSTALLATION
+===============================================================================
+To install the Ladybug software on Linux:
+
+$ sudo dpkg -i ladybug-<version>_<platform>.deb
+
+
+===============================================================================
+2. USB RELATED NOTES
+===============================================================================
+On Linux systems, image size is restricted to 2MiB or less by default. To
+increase this limit so that you can make use of your imaging hardware's full
+capabilities, you will need to make a minor change to your system. Steps to
+make the change can be found below, or at 
+<https://www.ptgrey.com/tan/10685#ConfiguringUSBFS>
+
+
+1. Open the /etc/default/grub file in any text editor. Find and replace:
+
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+
+with this:
+
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash usbcore.usbfs_memory_mb=1000"
+
+
+2. Update grub with these settings:
+
+$ sudo update-grub
+
+
+3. You may need to reboot.
+
+
+If this method fails to set the memory limit, run the following command:
+
+$ sudo sh -c 'echo 1000 > /sys/module/usbcore/parameters/usbfs_memory_mb'
+
+
+To confirm that you have successfully updated the memory limit, run the following command:
+
+cat /sys/module/usbcore/parameters/usbfs_memory_mb
+
+
+===============================================================================
+3. LADYBUG REMOVAL
+===============================================================================
+To uninstall:
+
+$ sudo dpkg -r ladybug
+
+To uninstall & remove installation config files after uninstall:
+
+$ sudo dpkg -P ladybug

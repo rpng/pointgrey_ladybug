@@ -1,0 +1,7 @@
+The Point Grey Research Ladybug Release Notes can be viewed online here:
+
+http://www.ptgrey.com/support/downloads/downloads_admin/Release_Notes/Ladybug_1_16_ReleaseNotes.htm#$1.16r48
+
+
+We welcome your bug reports, questions, and comments: 
+www.ptgrey.com/support/contact/
